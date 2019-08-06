@@ -109,6 +109,7 @@ func (t *ParserEis) writeAndSendPurchase(p Puchase44) {
 		Logging(err)
 		return
 	}
+	t.addDoc++
 	if p.refused {
 		t.sendMessage(p)
 	}
@@ -125,4 +126,5 @@ func (t *ParserEis) sendMessage(p Puchase44) {
 	if err != nil {
 		Logging(err)
 	}
+	t.sendDoc++
 }
