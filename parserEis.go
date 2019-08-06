@@ -80,7 +80,7 @@ func (t *ParserEis) checkPurchase(s string, p Puchase44) {
 		Logging(err, p.href)
 		return
 	}
-	eventText := strings.TrimSpace(doc.Find("#event").First().Text())
+	eventText := strings.TrimSpace(doc.Find("#event tbody tr").First().Text())
 	if strings.Contains(eventText, "участника") && strings.Contains(eventText, "Протокол") && strings.Contains(eventText, "уклонившимся") {
 		p.refused = true
 	}
