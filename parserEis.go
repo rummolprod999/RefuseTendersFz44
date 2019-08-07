@@ -5,6 +5,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"strings"
+	"time"
 )
 
 type ParserEis struct {
@@ -80,10 +81,16 @@ func (t *ParserEis) checkPurchase(s string, p Puchase44) {
 		Logging(err, p.href)
 		return
 	}
-	eventText := strings.TrimSpace(doc.Find("#event tbody tr").First().Text())
-	if strings.Contains(eventText, "участника") && strings.Contains(eventText, "Протокол") && strings.Contains(eventText, "уклонившимся") {
-		p.refused = true
-	}
+	timeNow := time.Now()
+	ft := timeNow.Format("02.01.2006")
+	doc.Find("#event tbody tr").Each(func(i int, s *goquery.Selection) {
+		textEvent := s.Text()
+		if strings.Contains(textEvent, "участника") && strings.Contains(textEvent, "Протокол") && strings.Contains(textEvent, "уклонившимся") && strings.Contains(textEvent, ft) {
+			p.refused = true
+		}
+
+	})
+
 	t.writeAndSendPurchase(p)
 }
 
