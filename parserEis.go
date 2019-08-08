@@ -90,7 +90,8 @@ func (t *ParserEis) checkPurchase(s string, p Puchase44) {
 		}
 
 	})
-
+	newP := strings.TrimSpace(doc.Find("#event tbody tr td").First().Text())
+	p.updDate = newP
 	t.writeAndSendPurchase(p)
 }
 

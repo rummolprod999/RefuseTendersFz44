@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"src/github.com/buger/jsonparser"
 	"sync"
 	"time"
@@ -23,7 +24,7 @@ var BotToken string
 var ChannelId int64
 var CountPage = 19
 var FileDB = "bd_purchase.sqlite"
-var StartUrl = "http://zakupki.gov.ru/epz/order/quicksearch/search.html?searchString=&morphology=on&sortDirection=false&recordsPerPage=_50&showLotsInfoHidden=false&fz44=on&placingWaysList=&placingWaysList223=&placingChildWaysList=&af=on&ca=on&pc=on&pa=on&priceFrom=&priceTo=&currencyId=-1&selectedSubjects=&agencyTitle=&agencyCode=&agencyFz94id=&agencyFz223id=&agencyInn=&region_regions_5277335=region_regions_5277335&region_regions_5277327=region_regions_5277327&regions=5277335%2C5277327&regionDeleted=false&publishDateFrom=&publishDateTo=&updateDateFrom=&updateDateTo=&applSubmissionCloseDateFrom=&applSubmissionCloseDateTo=&sortBy=UPDATE_DATE&pageNumber="
+var StartUrl = ""
 
 func DbConnection() (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", fmt.Sprintf("file:%s?_journal_mode=OFF&_synchronous=OFF", FileDB))
@@ -111,7 +112,15 @@ func ReadSetting() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	if BotToken == "" || ChannelId == 0 {
+	startUrl, err := jsonparser.GetString(b, "url")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	re := regexp.MustCompile(`&pageNumber=\d{1,2}`)
+	startUrl = re.ReplaceAllString(startUrl, "")
+	StartUrl = fmt.Sprintf("%s&pageNumber=", startUrl)
+	if BotToken == "" || ChannelId == 0 || StartUrl == "" {
 		fmt.Println("Check file with settings")
 		os.Exit(1)
 	}
