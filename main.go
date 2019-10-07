@@ -9,7 +9,7 @@ func init() {
 func main() {
 	defer SaveStack()
 	Logging("Start work")
-	p := ParserEis{}
+	p := ParserEisNew{}
 	p.run()
 	Logging(fmt.Sprintf("Add purchases %d", p.addDoc))
 	Logging(fmt.Sprintf("Send purchases %d", p.sendDoc))

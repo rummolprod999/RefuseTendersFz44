@@ -3,12 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/buger/jsonparser"
 	_ "github.com/mattn/go-sqlite3"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
-	"src/github.com/buger/jsonparser"
 	"sync"
 	"time"
 )

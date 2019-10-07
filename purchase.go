@@ -12,7 +12,7 @@ type Puchase44 struct {
 }
 
 func (p *Puchase44) CheckPurchase() bool {
-	if p.purNum == "" || p.purName == "" || p.pubDate == "" || p.updDate == "" || p.href == "" {
+	if p.purNum == "" || p.purName == "" || p.pubDate == "" || p.href == "" {
 		Logging(fmt.Sprintf("The purchase is bad %+v", p))
 		return false
 	}
