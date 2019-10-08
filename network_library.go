@@ -37,7 +37,7 @@ func GetPageUA(url string) (ret string) {
 		}
 	}()
 	var st string
-	client := &http.Client{}
+	client := &http.Client{Timeout: 30 * time.Second}
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		Logging("Error request", url, err)
@@ -45,11 +45,11 @@ func GetPageUA(url string) (ret string) {
 	}
 	request.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)")
 	resp, err := client.Do(request)
-	defer resp.Body.Close()
 	if err != nil {
 		Logging("Error download", url, err)
 		return st
 	}
+	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		Logging("Error reading", url, err)

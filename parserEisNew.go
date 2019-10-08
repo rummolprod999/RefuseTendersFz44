@@ -48,6 +48,9 @@ func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	defer SaveStack()
 	purNum := strings.TrimSpace(p.Find("div.registry-entry__header-top__number a").First().Text())
 	purNum = strings.Replace(purNum, "№ ", "", -1)
+	if len(purNum) < 18 {
+		return
+	}
 	purName := strings.TrimSpace(p.Find("div:contains('Объект закупки') + div.registry-entry__body-value").First().Text())
 	pubDate := strings.TrimSpace(p.Find("div.data-block > div:contains('Размещено') + div").First().Text())
 	updDate := strings.TrimSpace(p.Find("td.amountTenderTd ul li:nth-of-type(2)").First().Text())
