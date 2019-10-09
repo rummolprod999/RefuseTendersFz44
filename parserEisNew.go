@@ -94,6 +94,10 @@ func (t *ParserEisNew) checkPurchase(s string, p Puchase44) {
 
 	})
 	newP := strings.TrimSpace(doc.Find("#event tbody tr td").First().Text())
+	extractDate := findFromRegExp(newP, `(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})`)
+	if extractDate != "" {
+		newP = extractDate
+	}
 	p.updDate = newP
 	t.writeAndSendPurchase(p)
 }
