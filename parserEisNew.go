@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -95,10 +96,24 @@ func (t *ParserEisNew) checkPurchase(s string, p Puchase44) {
 	})
 	newP := strings.TrimSpace(doc.Find("#event tbody tr td").First().Text())
 	extractDate := findFromRegExp(newP, `(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})`)
+	updDateString := ""
 	if extractDate != "" {
-		newP = extractDate
+		updDate := getTimeMoscowLayout(extractDate, "02.01.2006 15:04")
+		offsetPur := findFromRegExp(newP, `МСК([+-]\d{1,2})`)
+		var valOffset int64 = 0
+		if offsetPur != "" {
+			valOffset, _ = strconv.ParseInt(offsetPur, 10, 32)
+			if valOffset != 0 {
+				updDate = updDate.Add(time.Hour * time.Duration(valOffset*-1))
+			}
+		}
+		updDateString = updDate.Format("02.01.2006 15:04")
 	}
-	p.updDate = newP
+	if updDateString != "" {
+		p.updDate = updDateString
+	} else {
+		p.updDate = newP
+	}
 	t.writeAndSendPurchase(p)
 }
 
