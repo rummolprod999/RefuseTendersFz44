@@ -9,9 +9,13 @@ func init() {
 func main() {
 	defer SaveStack()
 	Logging("Start work")
+	m := ParserEisFtp{}
+	m.run()
+	Logging(fmt.Sprintf("Send purchases from ftp %d", m.sendDoc))
 	p := ParserEisNew{}
 	p.run()
-	Logging(fmt.Sprintf("Add purchases %d", p.addDoc))
-	Logging(fmt.Sprintf("Send purchases %d", p.sendDoc))
+	Logging(fmt.Sprintf("Add purchases from site %d", p.addDoc))
+	Logging(fmt.Sprintf("Send purchases from site %d", p.sendDoc))
+
 	Logging("End work")
 }

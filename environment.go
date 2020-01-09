@@ -22,6 +22,7 @@ var FileLog Filelog
 var mutex sync.Mutex
 var BotToken string
 var ChannelId int64
+var Dsn string
 var CountPage = 19
 var FileDB = "bd_purchase.sqlite"
 var StartUrl = ""
@@ -117,6 +118,22 @@ func ReadSetting() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	DbName, err := jsonparser.GetString(b, "db")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	UserDb, err := jsonparser.GetString(b, "user_db")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	PassDb, err := jsonparser.GetString(b, "pass_db")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	Dsn = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=true&readTimeout=60m&maxAllowedPacket=0&timeout=60m&writeTimeout=60m&autocommit=true&loc=Local", UserDb, PassDb, DbName)
 	re := regexp.MustCompile(`&pageNumber=\d{1,2}`)
 	startUrl = re.ReplaceAllString(startUrl, "")
 	StartUrl = fmt.Sprintf("%s&pageNumber=", startUrl)
