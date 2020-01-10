@@ -16,7 +16,6 @@ import (
 type Filelog string
 
 var DirLog = "log_refuse44"
-var DirTemp = "temp_refuse44"
 var SetFile = "settings.json"
 var FileLog Filelog
 var mutex sync.Mutex
@@ -46,29 +45,6 @@ func CreateLogFile() {
 	t := time.Now()
 	ft := t.Format("2006-01-02")
 	FileLog = Filelog(filepath.FromSlash(fmt.Sprintf("%s/log_refuse44_%v.log", dirlog, ft)))
-}
-
-func CreateTempDir() {
-	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	dirtemp := filepath.FromSlash(fmt.Sprintf("%s/%s", dir, DirTemp))
-	if _, err := os.Stat(dirtemp); os.IsNotExist(err) {
-		err := os.MkdirAll(dirtemp, 0711)
-
-		if err != nil {
-			fmt.Println("Не могу создать папку для временных файлов")
-			os.Exit(1)
-		}
-	} else {
-		err = os.RemoveAll(dirtemp)
-		if err != nil {
-			fmt.Println("Не могу удалить папку для временных файлов")
-		}
-		err := os.MkdirAll(dirtemp, 0711)
-		if err != nil {
-			fmt.Println("Не могу создать папку для временных файлов")
-			os.Exit(1)
-		}
-	}
 }
 
 func Logging(args ...interface{}) {
@@ -192,6 +168,5 @@ func CreateNewDB() {
 func CreateEnv() {
 	ReadSetting()
 	CreateLogFile()
-	CreateTempDir()
 	CreateNewDB()
 }

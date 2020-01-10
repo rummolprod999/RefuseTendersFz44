@@ -47,16 +47,16 @@ func (t *ParserEisNew) parsingTenderList(p string, url string) {
 
 func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	defer SaveStack()
-	purNum := strings.TrimSpace(p.Find("div.registry-entry__header-top__number a").First().Text())
+	purNum := strings.TrimSpace(p.Find("div.registry-entry__header-mid__number a").First().Text())
 	purNum = strings.Replace(purNum, "№ ", "", -1)
 	if len(purNum) < 18 {
 		return
 	}
 	purName := strings.TrimSpace(p.Find("div:contains('Объект закупки') + div.registry-entry__body-value").First().Text())
 	pubDate := strings.TrimSpace(p.Find("div.data-block > div:contains('Размещено') + div").First().Text())
-	updDate := strings.TrimSpace(p.Find("td.amountTenderTd ul li:nth-of-type(2)").First().Text())
+	updDate := strings.TrimSpace(p.Find("div.data-block > div:contains('Обновлено') + div").First().Text())
 	updDate = strings.TrimSpace(strings.Replace(updDate, "Обновлено:", "", -1))
-	hrefT := p.Find("div.registry-entry__header-top__number a")
+	hrefT := p.Find("div.registry-entry__header-mid__number a")
 	href, exist := hrefT.Attr("href")
 	if !exist {
 		Logging("The element have no href attribute", hrefT.Text())
@@ -87,14 +87,14 @@ func (t *ParserEisNew) checkPurchase(s string, p Puchase44) {
 	}
 	timeNow := time.Now()
 	ft := timeNow.Format("02.01.2006")
-	doc.Find("#event tbody tr").Each(func(i int, s *goquery.Selection) {
+	doc.Find("div.tabBoxWrapper table.table tbody tr.table__row.table__row-body").Each(func(i int, s *goquery.Selection) {
 		textEvent := s.Text()
 		if strings.Contains(textEvent, "участника") && strings.Contains(textEvent, "Протокол") && strings.Contains(textEvent, "уклонившимся") && strings.Contains(textEvent, ft) {
 			p.refused = true
 		}
 
 	})
-	newP := strings.TrimSpace(doc.Find("#event tbody tr td").First().Text())
+	newP := strings.TrimSpace(doc.Find("div.tabBoxWrapper table.table tbody tr.table__row.table__row-body").First().Text())
 	extractDate := findFromRegExp(newP, `(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2})`)
 	updDateString := ""
 	if extractDate != "" {
