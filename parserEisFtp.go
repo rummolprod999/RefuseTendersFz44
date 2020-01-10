@@ -16,7 +16,7 @@ type ParserEisFtp struct {
 func (t *ParserEisFtp) run() {
 	defer SaveStack()
 	currTime := time.Now()
-	lastTime := currTime.AddDate(0, 0, -15)
+	lastTime := currTime.AddDate(0, 0, -10)
 	db, err := sql.Open("mysql", Dsn)
 	if err != nil {
 		Logging("error connection to db", err)
