@@ -87,7 +87,7 @@ func (t *ParserEisNew) checkPurchase(s string, p Puchase44) {
 	}
 	timeNow := time.Now()
 	ft := timeNow.Format("02.01.2006")
-	doc.Find("div.tabBoxWrapper table.table tbody tr.table__row.table__row-body").Each(func(i int, s *goquery.Selection) {
+	doc.Find("div.tabBoxWrapper table.table tbody tr.table__row").Each(func(i int, s *goquery.Selection) {
 		textEvent := s.Text()
 		if strings.Contains(textEvent, "участника") && strings.Contains(textEvent, "Протокол") && strings.Contains(textEvent, "уклонившимся") && strings.Contains(textEvent, ft) {
 			p.refused = true
