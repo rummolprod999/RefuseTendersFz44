@@ -61,12 +61,12 @@ func (t *ParserEis) parsingTenderFromList(p *goquery.Selection, url string) {
 	}
 	href = strings.Replace(href, "common-info", "event-journal", -1)
 	href = fmt.Sprintf("http://zakupki.gov.ru%s", href)
-	purch := Puchase44{href: href, pubDate: pubDate, updDate: updDate, purName: purName, purNum: purNum}
+	purch := Puchase{href: href, pubDate: pubDate, updDate: updDate, purName: purName, purNum: purNum}
 	if purch.CheckPurchase() {
 		t.getPurchasePage(purch)
 	}
 }
-func (t *ParserEis) getPurchasePage(p Puchase44) {
+func (t *ParserEis) getPurchasePage(p Puchase) {
 	r := DownloadPage(p.href)
 	if r != "" {
 		t.checkPurchase(r, p)
@@ -75,7 +75,7 @@ func (t *ParserEis) getPurchasePage(p Puchase44) {
 	}
 }
 
-func (t *ParserEis) checkPurchase(s string, p Puchase44) {
+func (t *ParserEis) checkPurchase(s string, p Puchase) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(s))
 	if err != nil {
 		Logging(err, p.href)
@@ -95,7 +95,7 @@ func (t *ParserEis) checkPurchase(s string, p Puchase44) {
 	t.writeAndSendPurchase(p)
 }
 
-func (t *ParserEis) writeAndSendPurchase(p Puchase44) {
+func (t *ParserEis) writeAndSendPurchase(p Puchase) {
 	db, err := DbConnection()
 	if err != nil {
 		Logging(err)
@@ -123,7 +123,7 @@ func (t *ParserEis) writeAndSendPurchase(p Puchase44) {
 	}
 }
 
-func (t *ParserEis) sendMessage(p Puchase44) {
+func (t *ParserEis) sendMessage(p Puchase) {
 	bot, err := tgbotapi.NewBotAPI(BotToken)
 	if err != nil {
 		Logging(err)

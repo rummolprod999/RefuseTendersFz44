@@ -31,7 +31,7 @@ func (t *ParserEisFtp) run() {
 		Logging("error execution query", err)
 		return
 	}
-	var protocols = []Puchase44{}
+	var protocols = []Puchase{}
 	for rows.Next() {
 		var purName string
 		var purNum string
@@ -44,18 +44,18 @@ func (t *ParserEisFtp) run() {
 			return
 		}
 		url = strings.Replace(url, "documents", "event-journal", -1)
-		protocols = append(protocols, Puchase44{pubDate: pubDate.String(), purNum: purNum, purName: purName, href: url, updDate: purchaseDate.String(), refused: true})
+		protocols = append(protocols, Puchase{pubDate: pubDate.String(), purNum: purNum, purName: purName, href: url, updDate: purchaseDate.String(), refused: true})
 	}
 	rows.Close()
 	t.fixProtocols(protocols)
 }
-func (t *ParserEisFtp) fixProtocols(protocols []Puchase44) {
+func (t *ParserEisFtp) fixProtocols(protocols []Puchase) {
 	for _, p := range protocols {
 		t.writeAndSendPurchase(p)
 	}
 }
 
-func (t *ParserEisFtp) writeAndSendPurchase(p Puchase44) {
+func (t *ParserEisFtp) writeAndSendPurchase(p Puchase) {
 	defer SaveStack()
 	db, err := DbConnection()
 	if err != nil {
@@ -84,7 +84,7 @@ func (t *ParserEisFtp) writeAndSendPurchase(p Puchase44) {
 	}
 }
 
-func (t *ParserEisFtp) sendMessage(p Puchase44) {
+func (t *ParserEisFtp) sendMessage(p Puchase) {
 	bot, err := tgbotapi.NewBotAPI(BotToken)
 	if err != nil {
 		Logging(err)
