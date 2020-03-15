@@ -23,6 +23,7 @@ var BotToken string
 var ChannelId int64
 var ChannelId2 int64
 var Dsn string
+var Dsn2 string
 var CountPage = 19
 var FileDB = "bd_purchase.sqlite"
 var StartUrl = ""
@@ -115,7 +116,28 @@ func ReadSetting() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	DbName2, err := jsonparser.GetString(b, "db2")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	UserDb2, err := jsonparser.GetString(b, "user_db2")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	PassDb2, err := jsonparser.GetString(b, "pass_db2")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	Server2, err := jsonparser.GetString(b, "server2")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	Dsn = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=true&readTimeout=60m&maxAllowedPacket=0&timeout=60m&writeTimeout=60m&autocommit=true&loc=Local", UserDb, PassDb, DbName)
+	Dsn2 = fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?charset=utf8&parseTime=true&readTimeout=60m&maxAllowedPacket=0&timeout=60m&writeTimeout=60m&autocommit=true&loc=Local", UserDb2, PassDb2, Server2, DbName2)
 	re := regexp.MustCompile(`&pageNumber=\d{1,2}`)
 	startUrl = re.ReplaceAllString(startUrl, "")
 	StartUrl = fmt.Sprintf("%s&pageNumber=", startUrl)
