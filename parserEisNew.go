@@ -69,14 +69,14 @@ func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	} else if strings.Contains(typeFzText, "223-ФЗ") {
 		tfz = 223
 	}
-	fmt.Println(typeFzText)
 	if tfz == 44 {
 		href = strings.Replace(href, "common-info", "event-journal", -1)
 	} else if tfz == 223 {
 		href = strings.Replace(href, "common-info", "journal", -1)
 	}
-
-	href = fmt.Sprintf("http://zakupki.gov.ru%s", href)
+	if tfz == 44 {
+		href = fmt.Sprintf("http://zakupki.gov.ru%s", href)
+	}
 	purch := Puchase{href: href, pubDate: pubDate, updDate: updDate, purName: purName, purNum: purNum, typeFz: tfz}
 	if purch.CheckPurchase() {
 		t.getPurchasePage(purch)
