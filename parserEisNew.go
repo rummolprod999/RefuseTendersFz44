@@ -49,7 +49,7 @@ func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	defer SaveStack()
 	purNum := strings.TrimSpace(p.Find("div.registry-entry__header-mid__number a").First().Text())
 	purNum = strings.Replace(purNum, "№ ", "", -1)
-	if len(purNum) < 18 {
+	if len(purNum) < 10 {
 		return
 	}
 	purName := strings.TrimSpace(p.Find("div:contains('Объект закупки') + div.registry-entry__body-value").First().Text())
@@ -69,6 +69,7 @@ func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	} else if strings.Contains(typeFzText, "223-ФЗ") {
 		tfz = 223
 	}
+	fmt.Println(typeFzText)
 	if tfz == 44 {
 		href = strings.Replace(href, "common-info", "event-journal", -1)
 	} else if tfz == 223 {
