@@ -204,11 +204,20 @@ func (t *ParserEisNew) sendMessage(p Puchase) {
 	if err != nil {
 		Logging(err)
 	}
-	msg := tgbotapi.NewMessage(ChannelId, p.CreateMessage())
-	msg.ParseMode = "html"
-	_, err = bot.Send(msg)
-	if err != nil {
-		Logging(err)
+	if p.typeFz == 44 {
+		msg := tgbotapi.NewMessage(ChannelId, p.CreateMessage())
+		msg.ParseMode = "html"
+		_, err = bot.Send(msg)
+		if err != nil {
+			Logging(err)
+		}
+	} else if p.typeFz == 223 {
+		msg := tgbotapi.NewMessage(ChannelId2, p.CreateMessage())
+		msg.ParseMode = "html"
+		_, err = bot.Send(msg)
+		if err != nil {
+			Logging(err)
+		}
 	}
 	t.sendDoc++
 }

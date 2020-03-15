@@ -21,6 +21,7 @@ var FileLog Filelog
 var mutex sync.Mutex
 var BotToken string
 var ChannelId int64
+var ChannelId2 int64
 var Dsn string
 var CountPage = 19
 var FileDB = "bd_purchase.sqlite"
@@ -85,6 +86,11 @@ func ReadSetting() {
 		os.Exit(1)
 	}
 	ChannelId, err = jsonparser.GetInt(b, "channel_id")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	ChannelId2, err = jsonparser.GetInt(b, "channel_id2")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
