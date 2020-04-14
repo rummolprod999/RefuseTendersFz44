@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -77,6 +78,9 @@ func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	if tfz == 44 {
 		href = fmt.Sprintf("http://zakupki.gov.ru%s", href)
 	}
+	href = strings.TrimSpace(href)
+	regRep, _ := regexp.Compile("&backUrl=.+$")
+	href = regRep.ReplaceAllString(href, "")
 	purch := Puchase{href: href, pubDate: pubDate, updDate: updDate, purName: purName, purNum: purNum, typeFz: tfz}
 	if purch.CheckPurchase() {
 		t.getPurchasePage(purch)
