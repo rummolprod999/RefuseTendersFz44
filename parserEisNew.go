@@ -72,7 +72,11 @@ func (t *ParserEisNew) parsingTenderFromList(p *goquery.Selection, url string) {
 	}
 	if tfz == 44 {
 		href = strings.Replace(href, "common-info", "event-journal", -1)
+		pubDate = strings.TrimSpace(p.Find("div.data-block__title:contains('Размещено') + div").First().Text())
+		updDate = strings.TrimSpace(p.Find("div.data-block__title:contains('Обновлено') + div").First().Text())
 	} else if tfz == 223 {
+		pubDate = strings.TrimSpace(p.Find("div.data-block__title:contains('Размещено') + div").First().Text())
+		updDate = strings.TrimSpace(p.Find("div.data-block__title:contains('Обновлено') + div").First().Text())
 		href = strings.Replace(href, "common-info", "journal", -1)
 	}
 	if tfz == 44 {
