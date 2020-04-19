@@ -81,6 +81,7 @@ func (t *ParserEisFtp223) writeAndSendPurchase(p Puchase) {
 	t.addDoc++
 	if p.refused {
 		t.sendMessage(p)
+		time.Sleep(time.Second * 10)
 	}
 }
 
